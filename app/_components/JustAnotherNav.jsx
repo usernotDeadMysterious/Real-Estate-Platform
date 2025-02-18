@@ -25,15 +25,15 @@ function JustAnotherNav() {
     }, [path]);
 
     return (
-      <div className='p-3 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
+      <div className='p-3 h-[15vh] flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
         {/* Left Side */}
-        <div className='flex gap-5 items-center'>
+        <div className='flex gap-10 items-center'>
           <Link href={'/'}>
             <Image src={'/logo.svg'} width={150} height={100} alt='logo' />
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className='hidden md:flex gap-4 text-nowrap'>
+          <ul className='hidden md:flex gap-20 text-nowrap'>
             <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/' && 'text-primary'}`}>For Sell</li></Link>
             <Link href={'/rent'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/rent' && 'text-primary'}`}>For Rent</li></Link>
             
@@ -41,7 +41,7 @@ function JustAnotherNav() {
         </div>
 
         {/* Right Side */}
-        <div className='hidden md:flex gap-2 items-center'>
+        <div className='hidden md:flex gap-6 items-center mr-10'>
           <Link href={'/add-new-listing'}>
             <Button className='flex gap-2'><Plus className='h-5 w-5'/>Post your Ad</Button>
           </Link>

@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo & Description */}
           <div>
-            <h2 className="text-2xl font-bold">Pakistan Real Estate</h2>
+            <h2 className="text-2xl font-bold">Pakistan Real Estates</h2>
             <p className="text-gray-400 mt-2">Find your dream home with ease.</p>
           </div>
 
