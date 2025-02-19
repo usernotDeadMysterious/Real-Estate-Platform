@@ -6,13 +6,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Bath, Bed, BedDouble, CarFront } from 'lucide-react'
+import { Bath, Bed, BedDouble, CarFront, Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType}) {
+function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,handleSearchClick}) {
   return (
-    <div className='px-3 py-2 gap-3 grid grid-cols-2 md:flex'>
+    <div>
+    <div className='px-3 py-2 gap-3 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 w-full'>
       <Select onValueChange={setBedCount}>
-  <SelectTrigger className=" w-[180px]">
+  <SelectTrigger className=" w-full">
     <SelectValue placeholder="Bedrooms" />
   </SelectTrigger>
   <SelectContent>
@@ -36,7 +38,7 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType}) {
       </Select>
 
       <Select onValueChange={setBathCount}>
-  <SelectTrigger className=" w-[180px]">
+  <SelectTrigger className=" w-full">
     <SelectValue placeholder="Bath" />
   </SelectTrigger>
   <SelectContent>
@@ -60,7 +62,7 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType}) {
       </Select>
 
       <Select onValueChange={setParkingCount}>
-  <SelectTrigger className=" w-[180px]">
+  <SelectTrigger className=" w-full">
     <SelectValue placeholder="Parking" />
   </SelectTrigger>
   <SelectContent>
@@ -84,7 +86,7 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType}) {
       </Select>
 
       <Select onValueChange={(value)=>value=='Any'?setHomeType(null):setHomeType(value)}>
-  <SelectTrigger className=" w-[180px]">
+  <SelectTrigger className=" w-full">
     <SelectValue placeholder="Home Type" />
   </SelectTrigger>
   <SelectContent>
@@ -103,8 +105,24 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType}) {
   </SelectContent>
       </Select>
 
+      
+
 
     </div>
+    <div className='px-3 py-2 gap-3 grid grid-cols-1  w-full'>
+
+    <Button className='flex gap-2'
+          onClick={() => {
+            console.log('Search button clicked');
+            handleSearchClick();
+          }}
+          
+        ><Search className='h-4 w-4'/>
+        Search</Button>
+    </div>
+    
+    </div>
+    
   )
 }
 

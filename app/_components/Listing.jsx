@@ -27,13 +27,7 @@ function Listing({listing,
         }}
         setCoordinates={setCoordinates}
         />
-        <Button className='flex gap-2'
-          onClick={handleSearchClick}
-        >
-          
-          <Search className='h-4 w-4'/>
         
-        Search</Button>
         
       </div>
       <FilterSection 
@@ -42,10 +36,19 @@ function Listing({listing,
       setParkingCount={setParkingCount}
       setHomeType={setHomeType}
       setCoordinates={setCoordinates}
+      handleSearchClick={handleSearchClick}
 
       />
+
+      <div className='flex justify-center my-4'>
+      
+      </div>
+      
+      
         {address&&<div className='px-3 my-5 '>
           <h2 className='text-xl'>Found <span className='font-bold'>{listing?.length}</span> Result in <span className='text-primary font-bold'>{address?.label}</span></h2>
+
+
         </div>}
       
       <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
@@ -63,7 +66,7 @@ function Listing({listing,
                 className='rounded-lg object-cover h-[170px] w-full'
                 alt={`Listing ${index}`}
               />
-            {/* )} */}
+            
             <div className='flex mt-2 flex-col gap-2'>
               <h2 className='font-bold text-xl'>${item?.price}</h2>
               <h2 className='flex gap-2 text-sm text-gray-400'>
