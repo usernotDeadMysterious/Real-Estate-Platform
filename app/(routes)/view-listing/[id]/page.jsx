@@ -31,7 +31,9 @@ function page() {
     }
   return (
     <div className='px-10   sm:px-24 md:px-32 lg:px-56 my-3 '>
-      <Slider imageList={listingDetail?.listingImages} />
+      <Slider 
+      imageList={listingDetail?.listingImages} 
+      listingDetail={listingDetail} />
       <Details listingDetail={listingDetail} />
     </div>
   )

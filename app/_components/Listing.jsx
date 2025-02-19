@@ -18,6 +18,15 @@ function Listing({listing,
 }) {
 
   const [address, setAddress ]= useState();
+  const convertToPakistaniUnits = (sqFt) => {
+    if (sqFt >= 43560) {
+      return `${(sqFt / 43560).toFixed(2)} Acre`;
+    } else if (sqFt >= 5445) {
+      return `${(sqFt / 5445).toFixed(2)} Kanal`;
+    } else {
+      return `${(sqFt / 272.25).toFixed(2)} Marla`;
+    }
+  };
   return (
     <div >
       <div className='p-3 flex gap-6'>
@@ -68,7 +77,9 @@ function Listing({listing,
               />
             
             <div className='flex mt-2 flex-col gap-2'>
-              <h2 className='font-bold text-xl'>${item?.price}</h2>
+              <h2 className='font-bold text-xl'>
+              Rs. {item.price?.toLocaleString('en-PK')} /-
+              </h2>
               <h2 className='flex gap-2 text-sm text-gray-400'>
                 <MapPin className='h-4 w-4'/>
                 {item.address}</h2>
@@ -83,7 +94,11 @@ function Listing({listing,
                   </h2>
                   <h2 className='flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center'>
                     <Ruler className='h-4 w-4'/>
-                    {item?.area}
+                    {item?.area} Sq.ft
+                  </h2>
+                  <h2 className="flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center">
+                  <Ruler className="h-4 w-4" />
+                  {convertToPakistaniUnits(item?.area)}
                   </h2>
                 </div>
             </div>

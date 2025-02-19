@@ -22,7 +22,7 @@ export default function Footer() {
                 </Link>
               </li> */}
               <li>
-                <Link href="/sell" className="text-gray-400 hover:text-white transition">
+                <Link href="/" className="text-gray-400 hover:text-white transition">
                   For Sell
                 </Link>
               </li>

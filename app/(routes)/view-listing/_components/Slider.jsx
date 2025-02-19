@@ -8,17 +8,32 @@ import {
   } from "@/components/ui/carousel"
 import Image from 'next/image'
   
-function Slider({imageList}) {
-    // console.log(imageList)
+function Slider({imageList,listingDetail }) {
+    console.log(listingDetail?.type)
   return (
-    <div className='mt-5'>
+    <div className='pt-3 '>
+      
+        {/* Badge for Rent/Sale */}
+      
+      
       {imageList?(
       <Carousel>
         <CarouselContent>
             {imageList.map((item,index)=>(
 
                 <CarouselItem key={item.url} >
-                    <Image src={item.url} width={800} height={300} alt='image' className='rounded-xl object-contain h-[400px]  w-full '/>
+                    <div className='flex relative'>
+                      <Image src={item.url} width={800} height={300} alt='image' className='rounded-xl object-contain h-[400px]  w-full '/>
+                      {listingDetail?.type && (
+                      <div className="absolute top-14 left-4 bg-blue-600 text-white px-3 py-1 text-sm font-bold rounded-lg shadow-md z-10">
+                        {listingDetail.type === "Rent" && "For Rent"}
+                        {listingDetail.type === "Sell" && "For Sale"}
+                      </div>
+                      )}
+                    </div>
+                    
+                    
+
                 </CarouselItem>
             ))}
             
