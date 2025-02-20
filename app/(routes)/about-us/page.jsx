@@ -27,7 +27,7 @@ function page() {
           Our development team is passionate about building user-friendly and efficient solutions. 
           Stay tuned as we add more details about the amazing minds behind this platform.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1  gap-6">
           {/* Developer 1 */}
           <div className="bg-gray-50 p-4 rounded-lg shadow flex flex-col items-center">
             <img 
@@ -37,7 +37,9 @@ function page() {
             />
             <h3 className="text-xl font-semibold text-gray-800">Aizaz Khalid</h3>
             <p className="text-gray-600">Full-Stack Developer</p>
+            <p className="text-gray-600 ">Email: aizazkhalid852@gmail.com</p>
             <p className="text-gray-500 text-sm">Specializing in modern web development, React.js, and backend systems.</p>
+            
           </div>
           {/* Developer 2
           <div className="bg-gray-50 p-4 rounded-lg shadow flex flex-col items-center">

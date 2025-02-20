@@ -25,7 +25,7 @@ function Header() {
   return (
     <div className='p-3 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
       <div className='flex gap-12 items-center'>
-        <Image src={'/logo.svg'} width={150} height={100} alt='logo' />
+        <Image src={'/logo.svg'} width={250} height={150} alt='logo' />
         
         <ul className='flex gap-12'>
             <Link href={'/'}><li className={`'hover:text-primary font-medium text-sm cursor-pointer'

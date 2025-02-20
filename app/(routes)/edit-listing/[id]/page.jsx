@@ -46,6 +46,7 @@ function Page() {
     if (user) verifyUserRecord();
   }, [user]);
 
+
   const verifyUserRecord = async () => {
     const { data, error } = await supabase
       .from("listing")
@@ -74,7 +75,7 @@ function Page() {
 
     if (data) {
       console.log(data);
-      toast("Listing Updated and Published");
+      toast("Listing Updated and Saved");
       setLoading(false)
     }
 
@@ -140,23 +141,35 @@ function Page() {
   }
 
   return (
-    <div className="px-10 md:px-30 my-10">
-      <h2 className="font-bold text-2xl">
+    <div className="pt-16 px-10 md:px-30 my-10">
+      <div className="flex rounded-lg">
+
+      <h2 className=" font-bold text-2xl p-2">
         Enter Some More Details About Your Listing
       </h2>
+      </div>
       <Formik
         initialValues={{
-          type: "",
-          propertyType: "",
-          profileImage:user?.imageUrl,
-          fullName:user?.fullName
+          type: listing?.type,
+          propertyType: listing?.propertyType,
+          profileImage: user?.imageUrl || "",  // Ensure default empty string
+          fullName: user?.fullName || "",
         }}
+        enableReinitialize={true} // ✅ This will allow Formik to update values when user changes
         onSubmit={(values) => {
-          console.log(values);
+          console.log("Submitting Values:", values);
           onSubmitHandler(values);
         }}
       >
-        {({ values, handleChange, handleSubmit }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue }) => {
+    useEffect(() => {
+      if (user) {
+        setFieldValue("profileImage", user.imageUrl);
+        setFieldValue("fullName", user.fullName);
+      }
+    }, [user]); // ✅ Update when user changes
+
+    return (
           <form onSubmit={handleSubmit}>
             <div className="p-8 rounded-lg shadow-md">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -184,9 +197,9 @@ function Page() {
                       <SelectValue placeholder={listing?.propertyType?listing?.propertyType:"Select Property Type"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Single Family House">Single Family House</SelectItem>
+                      <SelectItem value="Village Home">Village Home</SelectItem>
                       <SelectItem value="Town House">Town House</SelectItem>
-                      <SelectItem value="Condo">Condo</SelectItem>
+                      
                     </SelectContent>
                   </Select>
                 </div>
@@ -203,7 +216,7 @@ function Page() {
                   defaultValue={listing?.bathroom} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">Built In</h2>
+                  <h2 className="text-gray-500">Home Built In (Area)</h2>
                   <Input type="number" placeholder="Ex.1900 Sq.ft" name="builtIn" onChange={handleChange}
                   defaultValue={listing?.builtIn} />
                 </div>
@@ -215,26 +228,26 @@ function Page() {
                   defaultValue={listing?.parking} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">Lot Size</h2>
+                  {/* <h2 className="text-gray-500">Lot Size</h2>
                   <Input type="number" placeholder="" name="lotSize" onChange={handleChange}
-                  defaultValue={listing?.lotSize} />
+                  defaultValue={listing?.lotSize} /> */}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">Area (Sq.Ft)</h2>
+                  <h2 className="text-gray-500">Total Area (Sq.Ft)</h2>
                   <Input type="number" placeholder="Ex.1900" name="area" onChange={handleChange}
                   defaultValue={listing?.area} />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">Selling Price ($)</h2>
+                  <h2 className="text-gray-500">Price (Pkr)</h2>
                   <Input type="number" placeholder="400000" name="price" onChange={handleChange}
                   defaultValue={listing?.price} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">HOA (Per Month) ($)</h2>
+                  {/* <h2 className="text-gray-500">HOA (Per Month) ($)</h2>
                   <Input type="number" placeholder="100" name="hoa" onChange={handleChange}
-                  defaultValue={listing?.hoa} />
+                  defaultValue={listing?.hoa} /> */}
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-5">
@@ -290,7 +303,8 @@ function Page() {
               </div>
             </div>
           </form>
-        )}
+        );
+      }}
       </Formik>
     </div>
   );

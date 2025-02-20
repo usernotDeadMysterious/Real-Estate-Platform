@@ -23,7 +23,12 @@ export default function Footer() {
               </li> */}
               <li>
                 <Link href="/" className="text-gray-400 hover:text-white transition">
-                  For Sell
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/for-sale" className="text-gray-400 hover:text-white transition">
+                  For Sale
                 </Link>
               </li>
               <li>

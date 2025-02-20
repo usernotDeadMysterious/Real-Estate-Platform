@@ -18,7 +18,7 @@ function Details({listingDetail}) {
   return listingDetail&& (
     <div className='my-6 flex gap-2 flex-col'>
       <div className='flex justify-between items-center'>
-        <div className='mt-4 mb-4'>
+        <div className=' mb-4'>
             <h2 className='font-bold text-3xl '>
             Rs. {listingDetail?.price?.toLocaleString('en-PK')} /-
             </h2>

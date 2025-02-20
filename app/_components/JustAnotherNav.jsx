@@ -29,13 +29,18 @@ function JustAnotherNav() {
         {/* Left Side */}
         <div className='flex gap-10 items-center'>
           <Link href={'/'}>
-            <Image src={'/logo.svg'} width={150} height={100} alt='logo' />
+            <Image src={'/logo.svg'} width={300} height={100} alt='logo' />
           </Link>
 
           {/* Desktop Navigation */}
           <ul className='hidden md:flex gap-20 text-nowrap'>
-            <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/' && 'text-primary'}`}>For Sell</li></Link>
+            <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/' && 'text-primary'}`}>Home</li></Link>
+            <Link href={'/for-sale'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/for-sale' && 'text-primary'}`}>For Sale</li></Link>
             <Link href={'/rent'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/rent' && 'text-primary'}`}>For Rent</li></Link>
+            <Link href={'/about-us'}>
+            <li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/about-us' && 'text-primary'}`}>About Us</li>
+            </Link>
+
             
           </ul>
         </div>
@@ -79,8 +84,10 @@ function JustAnotherNav() {
         {/* Mobile Menu Dropdown */}
         {menuOpen && (
           <div className="absolute top-16 left-0 w-full bg-white shadow-md p-4 md:hidden flex flex-col gap-4">
-            <Link href={'/'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Sell</Link>
+            <Link href={'/'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link href={'/for-sale'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Sale</Link>
             <Link href={'/rent'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Rent</Link>
+            <Link href={'/about-us'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>About Us</Link>
             
             
 
