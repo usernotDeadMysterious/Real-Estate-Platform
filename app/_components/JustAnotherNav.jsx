@@ -29,7 +29,7 @@ function JustAnotherNav() {
         {/* Left Side */}
         <div className='flex gap-10 items-center'>
           <Link href={'/'}>
-            <Image src={'/logo.svg'} width={300} height={100} alt='logo' />
+            <Image src={'/logo.svg'} width={230} height={100} alt='logo' />
           </Link>
 
           {/* Desktop Navigation */}

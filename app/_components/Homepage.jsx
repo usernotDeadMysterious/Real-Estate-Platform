@@ -12,7 +12,7 @@ function Homepage() {
         <h1 className="text-2xl font-bold">Pak Properties</h1>
       </header> */}
       
-      <main className="flex flex-col items-center justify-center flex-1 w-full  pt-4  bg-[url('/home5.jpg')] bg-cover bg-center bg-no-repeat">
+      <main className="flex flex-col items-center justify-center flex-1 w-full  pt-4  bg-[url('/home6hd.jpg')] bg-cover bg-center bg-no-repeat">
         
         {/* <Image src="/home5.jpg" alt="Home" width={500} height={300} className=" rounded-lg shadow-lg w-[85vw] h-[45vh] xl:w-[65vw]" /> */}
         <div className='flex flex-col w-[80vw] p-2'>
