@@ -5,7 +5,7 @@ import Homepage from "./_components/Homepage";
 
 export default function Home() {
   return (
-    <div className="p-10">
+    <div className="pt-2">
       <Homepage/>
     </div>
     

@@ -17,7 +17,7 @@ function Provider({children}) {
         <JustAnotherNav/>
 
         {/* <Navbar/> */}
-        <div className='mt-20'>
+        <div className='mt-12'>
         {children}
         </div>
         <Footer/>
