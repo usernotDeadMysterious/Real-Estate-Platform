@@ -1,34 +1,34 @@
 import { Button } from '@/components/ui/button';
-import Image from 'next/image'
-import { list } from 'postcss';
-import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
-function AgentDetails({listingDetail}) {
-    const myimg =listingDetail?.profileImage || '/default.png';
-    console.log(listingDetail)
-  return (
-    
+function AgentDetails({ listingDetail }) {
+    const myimg = listingDetail?.profileImage || '/default.png';
+    const ownerEmail = listingDetail?.createdBy; // Assuming this is the owner's email
 
-    <div className='flex gap-5 items-center justify-between p-5 rounded-lg shadow-md border my-6'>
-        <div className='items-center gap-4'>
-        <Image 
-      src={myimg}
-    //   src={listingDetail?.url}
-      alt='Profile Image'
-      width={60}
-      height={60}
-      className='rounded-full'
-      />
-      <div>
-        <h2 className='text-lg  font-bold'>{listingDetail?.fullName}</h2>
-        <h2 className='text-gray-500'>{listingDetail?.createdBy}</h2>
-        
-      </div>
+    return (
+        <div className="flex gap-5 items-center justify-between p-5 rounded-lg shadow-md border my-6">
+            <div className="flex items-center gap-4">
+                <Image
+                    src={myimg}
+                    alt="Profile Image"
+                    width={60}
+                    height={60}
+                    className="rounded-full"
+                />
+                <div>
+                    <h2 className="text-lg font-bold">{listingDetail?.fullName}</h2>
+                    <h2 className="text-gray-500">{ownerEmail}</h2>
+                </div>
+            </div>
+
+            {/* Pass only ownerEmail as a query parameter */}
+            <Link href={`/contact-owner?email=${ownerEmail}`}>
+                <Button>Send Message</Button>
+            </Link>
         </div>
-      
-      <Button>Send Message</Button>
-    </div>
-  )
+    );
 }
 
-export default AgentDetails
+export default AgentDetails;
