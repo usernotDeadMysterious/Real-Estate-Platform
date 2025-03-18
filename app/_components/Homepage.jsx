@@ -1,15 +1,22 @@
 "use client";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useUnreadMessages } from '../hooks/useUnreadMessages';
+// import { useUnreadMessages } from '../hooks/useUnreadMessages';
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import { MailCheck } from 'lucide-react';
+// import { useUnreadMessages2 } from '../hooks/useUnreadMessages2';
+import { useUnreadMessagesPolling } from "../hooks/useUnreadMessagesPolling";
 
 function Homepage() {
-    const unreadCount = useUnreadMessages();
+    // const unreadCount = useUnreadMessages2();
+    const unreadCount = useUnreadMessagesPolling();
+
     const { user, isLoaded } = useUser();
     console.log("User:", user);
+    console.log("Unread count:", unreadCount);
+
+    
     return (
         <div>
             {/* Notification Bar for Unread Messages */}

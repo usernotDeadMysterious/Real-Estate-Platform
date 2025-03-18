@@ -38,20 +38,21 @@ function page() {
             <h3 className="text-xl font-semibold text-gray-800">Aizaz Khalid</h3>
             <p className="text-gray-600">Full-Stack Developer</p>
             <p className="text-gray-600 ">Email: aizazkhalid852@gmail.com</p>
-            <p className="text-gray-500 text-sm">Specializing in modern web development, React.js, and backend systems.</p>
+            <p className="text-gray-500 text-sm">Specializing in modern web development, React.js, Next.js and backend systems.</p>
             
           </div>
-          {/* Developer 2
+          
           <div className="bg-gray-50 p-4 rounded-lg shadow flex flex-col items-center">
             <img 
-              src="https://via.placeholder.com/100" 
+              src="/placeholderimage.jpg" 
               alt="Jane Smith" 
               className="w-24 h-24 rounded-full mb-4"
             />
-            <h3 className="text-xl font-semibold text-gray-800">Jane Smith</h3>
-            <p className="text-gray-600">UI/UX Designer</p>
-            <p className="text-gray-500 text-sm">Focusing on intuitive designs and seamless user experiences.</p>
-          </div> */}
+            <h3 className="text-xl font-semibold text-gray-800">Ahmed Maaz</h3>
+            <p className="text-gray-600">Full Stack Developer</p>
+            <p className="text-gray-600">Email: ahmadmaaz033482@gmail.com </p>
+            <p className="text-gray-500 text-sm">Focusing on front-end technologies like React & Next JS, Back-end technologies like PHP </p>
+          </div>
         </div>
       </div>
     </div>

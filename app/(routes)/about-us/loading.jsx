@@ -2,7 +2,7 @@ import React from 'react'
 
 function loading() {
   return (
-    <div>
+    <div className='flex '> 
       Loading ....
     </div>
   )

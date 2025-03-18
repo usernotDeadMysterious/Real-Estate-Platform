@@ -24,7 +24,9 @@ function AgentDetails({ listingDetail }) {
             </div>
 
             {/* Pass only ownerEmail as a query parameter */}
-            <Link href={`/contact-owner?email=${ownerEmail}`}>
+            <Link 
+             href={`/contact-owner?email=${ownerEmail}&title=${listingDetail.description}&location=${listingDetail.address}&price=${listingDetail.price}`}
+            >
                 <Button>Send Message</Button>
             </Link>
         </div>

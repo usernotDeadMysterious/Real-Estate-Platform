@@ -1,8 +1,12 @@
 import { SignIn } from '@clerk/nextjs'
+import Head from 'next/head'
 
 export default function Page() {
   return (
-    
+  <>  
+    <Head>
+        <title>Sign In | Pak-Properties</title>
+      </Head>    
 
 <section className="bg-white">
   <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -76,5 +80,6 @@ export default function Page() {
     </main>
   </div>
 </section>
+</>
   )
 }

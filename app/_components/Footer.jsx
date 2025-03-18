@@ -52,7 +52,7 @@ export default function Footer() {
           {/* Contact & Socials */}
           <div>
             <h3 className="text-lg font-semibold">Contact</h3>
-            <p className="text-gray-400 mt-2">Email: aizazkhalid852@gmail.com</p>
+            <p className="text-gray-400 mt-2">Email: pak-real-estate-92@gmail.com</p>
             <p className="text-gray-400">Phone: +92316-9694343</p>
 
             {/* Social Media Links */}
