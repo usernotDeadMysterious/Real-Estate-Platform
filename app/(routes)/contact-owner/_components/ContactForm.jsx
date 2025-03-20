@@ -61,6 +61,7 @@ function ContactForm() {
                 propertyTitle: propertyTitle, 
                 propertyLocation: propertyLocation, 
                 propertyPrice: propertyPrice,
+                isRead: false, 
             },
         ]);
 
