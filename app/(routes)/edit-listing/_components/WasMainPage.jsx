@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Formik } from "formik";
@@ -38,7 +37,7 @@ function Page() {
   const { user } = useUser();
   const router = useRouter();
 
-  const [isFormValid, setIsFormValid] = useState(false);
+
   
   const [listing,setListing]= useState([]);
   const [images , setImages]=useState([]);
@@ -65,17 +64,8 @@ function Page() {
     }
   };
 
-  const isValidForm = (formValue) => {
-    return Object.values(formValue).every(value => value !== "" && value !== null && value !== undefined);
-  };
   const onSubmitHandler = async (formValue) => {
     
-    
-    if (!isValidForm(formValue)) {
-      toast("Please fill in all the details about your property before publishing.");
-      return;
-    }
-  
     setLoading(true);
     const { data, error } = await supabase
       .from("listing")
@@ -85,7 +75,7 @@ function Page() {
 
     if (data) {
       console.log(data);
-      toast("Listing Saved");
+      toast("Listing Updated and Saved");
       setLoading(false)
     }
 
@@ -137,13 +127,7 @@ function Page() {
     }
 
   }
-  
-  const publishBtnHandler=async(formValue)=>{
-    // Validate if all required fields are filled
-  if (!isValidForm(formValue)) {
-    toast("Please fill in all the details about your property before publishing.");
-    return;
-  }
+  const publishBtnHandler=async()=>{
     setLoading(true);
     const { data, error } = await supabase
     .from('listing')
@@ -155,10 +139,6 @@ function Page() {
           toast('Listing published')
         }
   }
-
-
-
-
 
   return (
     <div className="pt-16 px-10 md:px-30 my-10">
@@ -188,11 +168,7 @@ function Page() {
         setFieldValue("fullName", user.fullName);
       }
     }, [user]); // ✅ Update when user changes
-  // Check if all required fields are filled
-  useEffect(() => {
-    const isFilled = values.type && values.propertyType && values.bedroom && values.bathroom && values.builtIn && values.parking && values.area && values.price && values.description;
-    setIsFormValid(isFilled);
-  }, [values]); // ✅ Trigger validation when form values change
+
     return (
           <form onSubmit={handleSubmit}>
             <div className="p-8 rounded-lg shadow-md">
@@ -200,8 +176,7 @@ function Page() {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg text-slate-500">Rent or Sell?</h2>
                   <RadioGroup 
-                  // defaultValue={listing?.type}
-                  value={values.type} 
+                  defaultValue={listing?.type} 
                   onValueChange={(v) => (values.type = v)}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="Rent" id="Rent" />
@@ -216,13 +191,14 @@ function Page() {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg text-slate-500">Property Type</h2>
                   <Select onValueChange={(e) => (values.propertyType = e)} name="propertyType"
-                  defaultValue={listing?.type}
+                  defaultValue={listing?.propertyType}
                     >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={listing?.propertyType?listing?.propertyType:"Select Property Type"} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Village Home">Village Home</SelectItem>
+                      <SelectItem value="Room">Room</SelectItem>
                       <SelectItem value="Town House">Town House</SelectItem>
                       
                     </SelectContent>
@@ -252,11 +228,11 @@ function Page() {
                   <Input type="number" placeholder="Ex.2" name="parking" onChange={handleChange}
                   defaultValue={listing?.parking} />
                 </div>
-                {/* <div className="flex flex-col gap-2">
-                  <h2 className="text-gray-500">Lot Size</h2>
+                <div className="flex flex-col gap-2">
+                  {/* <h2 className="text-gray-500">Lot Size</h2>
                   <Input type="number" placeholder="" name="lotSize" onChange={handleChange}
-                  defaultValue={listing?.lotSize} />
-                </div> */}
+                  defaultValue={listing?.lotSize} /> */}
+                </div>
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Total Area (Sq.Ft)</h2>
                   <Input type="number" placeholder="Ex.1900" name="area" onChange={handleChange}
@@ -269,11 +245,11 @@ function Page() {
                   <Input type="number" placeholder="400000" name="price" onChange={handleChange}
                   defaultValue={listing?.price} />
                 </div>
-                <div className="flex flex-col gap-2">
-                  {/* <h2 className="text-gray-500">HOA (Per Month) ($)</h2>
+                {/* <div className="flex flex-col gap-2">
+                  <h2 className="text-gray-500">HOA (Per Month) ($)</h2>
                   <Input type="number" placeholder="100" name="hoa" onChange={handleChange}
-                  defaultValue={listing?.hoa} /> */}
-                </div>
+                  defaultValue={listing?.hoa} />
+                </div> */}
               </div>
               <div className="grid grid-cols-1 gap-5">
                 <h2 className="text-gray-500">Description</h2>
@@ -290,12 +266,10 @@ function Page() {
                 imageList={listing.listingImages}
                   />
               </div>
-
-
               <div className="flex gap-7 justify-end">
                 
                 <Button 
-                disabled={loading } 
+                disabled={loading} 
                 variant="outline"
                  
                 className="text-primary border-primary">
@@ -305,16 +279,12 @@ function Page() {
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                     <Button 
-                      disabled={loading } 
+                      disabled={loading} 
                       type="button" 
                       className="">
-                        {loading?<Loader className='animate-spin'/>:"Publish"}
+                        {loading?<Loader className='animate-spin'/>:"Save & Publish"}
                       </Button>
                     </AlertDialogTrigger>
-
-
-
-
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Ready to Publish?</AlertDialogTitle>
@@ -324,7 +294,7 @@ function Page() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={()=>publishBtnHandler(values)}>
+                        <AlertDialogAction onClick={()=>publishBtnHandler()}>
                           {loading?<Loader className="animate-spin"/>:'Continue'}
                           </AlertDialogAction>
                       </AlertDialogFooter>
