@@ -84,7 +84,7 @@ function ListingMapView({ type  }) {
       
       {message && (
         // Show this message if 'Rooms' are selected on the 'For Sale' page
-        <div className="text-yellow-800 p-4 rounded-lg mb-4">
+        <div className="text-yellow-800 text-lg p-4 rounded-lg  mb-4">
           <p>{message}</p>
           <Link href="/rent">
             <Button variant="outline" className="mt-2">For Rent</Button>

@@ -1,4 +1,4 @@
-import { BathIcon, BedDouble, MapPin, Paperclip, Ruler, Search } from 'lucide-react'
+import { BathIcon, BedDouble, HomeIcon, MapPin, Paperclip, Ruler, Search } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import GoogleUpdated from './GoogleUpdated'
@@ -80,7 +80,9 @@ function Listing({listing,
               <h2 className='font-bold text-xl'>
               Rs. {item.price?.toLocaleString('en-PK')} /-
               </h2>
-
+              <h2 className='font-bold text-xl'>
+               {item.propertyType}
+              </h2>
               <h2 className='flex gap-2 text-sm text-gray-600'>
                 <MapPin className='h-4 w-4'/>
                 {item.address}</h2>
