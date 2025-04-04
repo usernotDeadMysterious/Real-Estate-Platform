@@ -34,11 +34,29 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 // import AdditionalDetailsForm from "../_components/AdditionalDetailsForm";
-
+// import { onSubmitHandler, publishBtnHandler } from "../_components/listingActions";
 import AdditionalDetailsForm from "../_components/AdditionalDetailsForm";
 
 
 function Page() {
+  // const [formValues, setFormValues] = useState({
+  //   ownersCnic: "",        // Validated as 13 digits
+  //   contactInfo: "",       // Validated as 11 digits
+  //   title: "",             // Likely needed for listing details
+  //   description: "",
+  //   price: "",
+  //   location: "",
+  //   latitude: "",
+  //   longitude: "",
+  //   propertyType: "",
+  //   bedrooms: "",
+  //   bathrooms: "",
+  //   areaSize: "",
+  //   furnished: false,
+  //   images: [],            // Used in image upload handling
+  //   availability: "available",
+  //   active: "false",       // Used in publishBtnHandler
+  // });
   const { id } = useParams(); // ✅ Correct way to access params
   const { user } = useUser();
   const router = useRouter();
@@ -51,33 +69,49 @@ function Page() {
   useEffect(() => {
     if (user) verifyUserRecord();
   }, [user]);
+  
   const validationSchema = Yup.object().shape({
     type: Yup.string().required("Type is required"),
     propertyType: Yup.string().required("Property type is required"),
     price: Yup.number().required("Price is required"),
     description: Yup.string().required("Description is required"),
-    bedroom: Yup.number().when('propertyType', {
-      is: (value) => value !== 'Room', 
-      then: Yup.number().required("Bedroom is required")
-    }),
-    bathroom: Yup.number().when('propertyType', {
-      is: (value) => value !== 'Room', 
-      then: Yup.number().required("Bathroom is required")
-    }),
-    builtIn: Yup.number().when('propertyType', {
-      is: (value) => value !== 'Room', 
-      then: Yup.number().required("Built-in area is required")
-    }),
-    parking: Yup.number().when('propertyType', {
-      is: (value) => value !== 'Room', 
-      then: Yup.number().required("Parking is required")
-    }),
-    area: Yup.number().when('propertyType', {
-      is: (value) => value !== 'Room', 
-      then: Yup.number().required("Area is required")
-    }),
+    
+    bedroom: Yup.number()
+      .when("propertyType", {
+        is: (value) => value !== "Room", // Ensure this is a direct value check
+        then: (schema) => schema.required("Bedroom is required"),
+        otherwise: (schema) => schema.notRequired(), // Ensuring 'Room' property type doesn't require this field
+      }),
+    
+    bathroom: Yup.number()
+      .when("propertyType", {
+        is: (value) => value !== "Room",
+        then: (schema) => schema.required("Bathroom is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+  
+    builtIn: Yup.number()
+      .when("propertyType", {
+        is: (value) => value !== "Room",
+        then: (schema) => schema.required("Built-in area is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+  
+    parking: Yup.number()
+      .when("propertyType", {
+        is: (value) => value !== "Room",
+        then: (schema) => schema.required("Parking is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+  
+    area: Yup.number()
+      .when("propertyType", {
+        is: (value) => value !== "Room",
+        then: (schema) => schema.required("Area is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
   });
-
+  
 
   const verifyUserRecord = async () => {
     const { data, error } = await supabase
@@ -227,7 +261,7 @@ function Page() {
           toast('Listing published')
         }
   }
-
+  
 
 
 
@@ -256,6 +290,7 @@ function Page() {
         onSubmit={(values) => {
           console.log("Submitting Values:", values);
           onSubmitHandler(values);
+          
         }}
       >
         {({ values, handleChange, handleSubmit, setFieldValue }) => {
@@ -434,6 +469,7 @@ function Page() {
               <div className="flex gap-7 justify-end mt-3">
                 
                 <Button 
+                // type='submit'
                 disabled={loading } 
                 variant="outline"
                  
@@ -445,7 +481,7 @@ function Page() {
                     <AlertDialogTrigger asChild>
                     <Button 
                       disabled={loading } 
-                      type="button" 
+                      
                       className="">
                         {loading?<Loader className='animate-spin'/>:"Publish"}
                       </Button>
