@@ -7,7 +7,7 @@ import React from 'react'
 function page() {
   return (
     <div className="p-10">
-      <ListingMapView type='Sell'/>
+      <ListingMapView type='Sell'  />
     </div>
   )
 }

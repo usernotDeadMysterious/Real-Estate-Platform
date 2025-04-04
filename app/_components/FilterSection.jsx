@@ -87,20 +87,26 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
 
       <Select onValueChange={(value)=>value=='Any'?setHomeType(null):setHomeType(value)}>
   <SelectTrigger className=" w-full">
-    <SelectValue placeholder="Home Type" />
+    <SelectValue placeholder="Type" />
   </SelectTrigger>
   <SelectContent>
-  <SelectItem value="Any">
+  {/* <SelectItem value="Any">
       Any
+    </SelectItem> */}
+    <SelectItem value="House">
+      House
     </SelectItem>
-    <SelectItem value="Single Family House">
-      Single Family Home
+    <SelectItem value="Single Portion">
+      Single Portion
     </SelectItem>
-    <SelectItem value="Town House">
-      Town House
+    <SelectItem value="Apartment">
+      Apartment
     </SelectItem>
-    <SelectItem value="Condo">
-      Condo
+    <SelectItem value="Business Area">
+      Business Area
+    </SelectItem>
+    <SelectItem value="Rooms">
+      Rooms
     </SelectItem>
   </SelectContent>
       </Select>

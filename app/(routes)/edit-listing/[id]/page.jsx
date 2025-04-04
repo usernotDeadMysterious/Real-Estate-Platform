@@ -20,6 +20,8 @@ import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import FileUpload from "../_components/FileUpload";
 import { Loader } from "lucide-react";
+import * as Yup from 'yup';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +33,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+// import AdditionalDetailsForm from "../_components/AdditionalDetailsForm";
+
+import AdditionalDetailsForm from "../_components/AdditionalDetailsForm";
 
 
 function Page() {
@@ -46,6 +51,32 @@ function Page() {
   useEffect(() => {
     if (user) verifyUserRecord();
   }, [user]);
+  const validationSchema = Yup.object().shape({
+    type: Yup.string().required("Type is required"),
+    propertyType: Yup.string().required("Property type is required"),
+    price: Yup.number().required("Price is required"),
+    description: Yup.string().required("Description is required"),
+    bedroom: Yup.number().when('propertyType', {
+      is: (value) => value !== 'Room', 
+      then: Yup.number().required("Bedroom is required")
+    }),
+    bathroom: Yup.number().when('propertyType', {
+      is: (value) => value !== 'Room', 
+      then: Yup.number().required("Bathroom is required")
+    }),
+    builtIn: Yup.number().when('propertyType', {
+      is: (value) => value !== 'Room', 
+      then: Yup.number().required("Built-in area is required")
+    }),
+    parking: Yup.number().when('propertyType', {
+      is: (value) => value !== 'Room', 
+      then: Yup.number().required("Parking is required")
+    }),
+    area: Yup.number().when('propertyType', {
+      is: (value) => value !== 'Room', 
+      then: Yup.number().required("Area is required")
+    }),
+  });
 
 
   const verifyUserRecord = async () => {
@@ -66,20 +97,45 @@ function Page() {
   };
 
   const isValidForm = (formValue) => {
-    return Object.values(formValue).every(value => value !== "" && value !== null && value !== undefined);
-  };
-  const onSubmitHandler = async (formValue) => {
-    
-    
-    if (!isValidForm(formValue)) {
-      toast("Please fill in all the details about your property before publishing.");
-      return;
+    if (formValue.propertyType === "Room") {
+      return formValue.type && formValue.price && formValue.description;
     }
   
+    return Object.values(formValue).every(value => 
+      value !== "" && value !== null && value !== undefined
+    );
+  };
+
+
+
+  const onSubmitHandler = async (formValue) => {
+  
+  const cnicPattern = /^\d{13}$/;
+  const contactPattern = /^\d{11}$/;
+  if (!cnicPattern.test(formValue.ownersCnic)) {
+    toast("CNIC should be exactly 13 digits.");
+    return;
+  }
+
+  if (!contactPattern.test(formValue.contactInfo)) {
+    toast("Contact number should be exactly 11 digits.");
+    return;
+  }
+    if (!isValidForm(formValue)) {
+      toast("Please fill in all the details about your property before saving.");
+      return;
+    }
+    const sanitizedValues = { ...formValue };
+
+    Object.keys(sanitizedValues).forEach((key) => {
+      if (sanitizedValues[key] === "") {
+        sanitizedValues[key] = null; // Convert empty strings to null
+      }
+    });
     setLoading(true);
     const { data, error } = await supabase
       .from("listing")
-      .update(formValue)
+      .update(sanitizedValues)
       .eq("id", id) // ✅ Use id from useParams()
       .select();
 
@@ -87,6 +143,10 @@ function Page() {
       console.log(data);
       toast("Listing Saved");
       setLoading(false)
+    }
+    else{
+      toast('Didn\'t Saved the listing ')
+      console.log('error is here : ',error)
     }
 
     for(const image of images){
@@ -139,6 +199,18 @@ function Page() {
   }
   
   const publishBtnHandler=async(formValue)=>{
+    const cnicPattern = /^\d{13}$/;
+    const contactPattern = /^\d{11}$/;
+  
+    if (!cnicPattern.test(formValue.ownersCnic)) {
+      toast("CNIC should be exactly 13 digits.");
+      return;
+    }
+  
+    if (!contactPattern.test(formValue.contactInfo)) {
+      toast("Contact number should be exactly 11 digits.");
+      return;
+    }
     // Validate if all required fields are filled
   if (!isValidForm(formValue)) {
     toast("Please fill in all the details about your property before publishing.");
@@ -172,10 +244,15 @@ function Page() {
         initialValues={{
           type: listing?.type,
           propertyType: listing?.propertyType,
-          profileImage: user?.imageUrl || "",  // Ensure default empty string
+          profileImage: user?.imageUrl || "",
           fullName: user?.fullName || "",
+          detailedAddress: listing?.detailedAddress || "",
+          ownersCnic: listing?.ownersCnic || "",
+          contactInfo: listing?.contactInfo || "",
+          agreement: listing?.agreement || "",
         }}
         enableReinitialize={true} // ✅ This will allow Formik to update values when user changes
+        validationSchema={validationSchema}
         onSubmit={(values) => {
           console.log("Submitting Values:", values);
           onSubmitHandler(values);
@@ -188,43 +265,95 @@ function Page() {
         setFieldValue("fullName", user.fullName);
       }
     }, [user]); // ✅ Update when user changes
+
+     // Automatically set "Rent" if "Room" is selected as property type
+    //Disable the fields for bedroom home built in area parking and total area when room is selected and remove validation for these fields 
+
+     useEffect(() => {
+      if (values.propertyType === "Room" && values.type !== "Rent") {
+        setFieldValue("type", "Rent");
+      }
+
+      if (values.propertyType === "Room") {
+        setFieldValue("bedroom", "");  // Reset bedroom field
+        // setFieldValue("bathroom", ""); // Reset bathroom field
+        setFieldValue("builtIn", "");  // Reset built-in area field
+        setFieldValue("parking", "");  // Reset parking field
+        setFieldValue("area", "");     // Reset total area field
+      }
+    }, [values.propertyType, values.type, setFieldValue]); // Run when propertyType changes
   // Check if all required fields are filled
   useEffect(() => {
-    const isFilled = values.type && values.propertyType && values.bedroom && values.bathroom && values.builtIn && values.parking && values.area && values.price && values.description;
-    setIsFormValid(isFilled);
+    const isFilled = values.type && values.propertyType && values.price && values.description;
+  
+    // Skip the validation of bedroom, bathroom, etc., when propertyType is "Room"
+    if (values.propertyType === "Room") {
+      setIsFormValid(isFilled); // Only check basic fields for Room
+    } else {
+      // For other property types, check all fields, including bedroom, bathroom, etc.
+      setIsFormValid(
+        isFilled && 
+        values.bedroom && 
+        values.bathroom && 
+        values.builtIn && 
+        values.parking && 
+        values.area
+      );
+    }
   }, [values]); // ✅ Trigger validation when form values change
     return (
           <form onSubmit={handleSubmit}>
             <div className="p-8 rounded-lg shadow-md">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {/* Detailed Address */}
+                <div className="grid sm:grid-cols-1 md:grid-cols-3">
+                  <div className="flex flex-col gap-2 ">
+                        <Label className="text-gray-500">Detailed Address</Label>
+                        <Textarea
+                          name="detailedAddress"
+                          placeholder="E.g:House no.x street no.x near this area "
+                          onChange={handleChange}
+                          value={values.detailedAddress || ""}
+                        />
+                      </div>
+                </div>
+                      
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-3">
+                
+                
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg text-slate-500">Rent or Sell?</h2>
+                  
                   <RadioGroup 
-                  // defaultValue={listing?.type}
-                  value={values.type} 
-                  onValueChange={(v) => (values.type = v)}>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Rent" id="Rent" />
-                      <Label htmlFor="Rent">Rent</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Sell" id="Sell" />
-                      <Label htmlFor="Sell">Sell</Label>
-                    </div>
-                  </RadioGroup>
+  value={values.type} 
+  onValueChange={(value) => setFieldValue("type", value)}
+>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value="Rent" id="Rent" />
+    <Label htmlFor="Rent">Rent</Label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value="Sell" id="Sell" />
+    <Label htmlFor="Sell">Sell</Label>
+  </div>
+</RadioGroup>
+
                 </div>
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg text-slate-500">Property Type</h2>
-                  <Select onValueChange={(e) => (values.propertyType = e)} name="propertyType"
+                  {/* <Select onValueChange={(e) => (values.propertyType = e)} name="propertyType"
                   defaultValue={listing?.type}
-                    >
+                    > */}
+                    <Select onValueChange={(value) => setFieldValue("propertyType", value)} name="propertyType">
+
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={listing?.propertyType?listing?.propertyType:"Select Property Type"} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Village Home">Village Home</SelectItem>
-                      <SelectItem value="Town House">Town House</SelectItem>
-                      
+                      <SelectItem value="House">House</SelectItem>
+                      <SelectItem value="Single Portion">Single Portion</SelectItem>
+                      <SelectItem value="Apartment">Apartment</SelectItem>
+                      <SelectItem value="Business Area">Business Area</SelectItem>
+                      <SelectItem value="Room">Room</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -233,7 +362,8 @@ function Page() {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Bedroom</h2>
                   <Input type="number" placeholder="Ex.2" name="bedroom" onChange={handleChange}
-                  defaultValue={listing?.bedroom} />
+                  defaultValue={listing?.bedroom}
+                  disabled={values.propertyType === "Room"} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Bathroom</h2>
@@ -243,14 +373,16 @@ function Page() {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Home Built In (Area)</h2>
                   <Input type="number" placeholder="Ex.1900 Sq.ft" name="builtIn" onChange={handleChange}
-                  defaultValue={listing?.builtIn} />
+                  defaultValue={listing?.builtIn}
+                  disabled={values.propertyType === "Room"} />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Parking</h2>
                   <Input type="number" placeholder="Ex.2" name="parking" onChange={handleChange}
-                  defaultValue={listing?.parking} />
+                  defaultValue={listing?.parking}
+                  disabled={values.propertyType === "Room"} />
                 </div>
                 {/* <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Lot Size</h2>
@@ -260,7 +392,8 @@ function Page() {
                 <div className="flex flex-col gap-2">
                   <h2 className="text-gray-500">Total Area (Sq.Ft)</h2>
                   <Input type="number" placeholder="Ex.1900" name="area" onChange={handleChange}
-                  defaultValue={listing?.area} />
+                  defaultValue={listing?.area}
+                  disabled={values.propertyType === "Room"} />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -290,9 +423,15 @@ function Page() {
                 imageList={listing.listingImages}
                   />
               </div>
+              
+              <AdditionalDetailsForm
+  values={values}
+  handleChange={handleChange}
+  setFieldValue={setFieldValue}
+/>
 
 
-              <div className="flex gap-7 justify-end">
+              <div className="flex gap-7 justify-end mt-3">
                 
                 <Button 
                 disabled={loading } 
@@ -330,13 +469,15 @@ function Page() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-
+                    
               </div>
+              
             </div>
           </form>
         );
       }}
       </Formik>
+      {/* <AdditionalDetailsForm></AdditionalDetailsForm> */}
     </div>
   );
 }
