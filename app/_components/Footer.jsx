@@ -41,11 +41,22 @@ export default function Footer() {
                   About Us
                 </Link>
               </li>
-              {/* <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition">
-                  Contact
+              <li>
+                <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition">
+                  Privacy Policy
                 </Link>
-              </li> */}
+              </li>
+              <li>
+                <Link href="/terms-of-use" className="text-gray-400 hover:text-white transition">
+                  Terms of Use
+                </Link>
+              </li>
+              <li>
+                <Link href="/developers" className="text-gray-400 hover:text-white transition">
+                  Meet the Developers
+                </Link>
+              </li>
+              
             </ul>
           </div>
 

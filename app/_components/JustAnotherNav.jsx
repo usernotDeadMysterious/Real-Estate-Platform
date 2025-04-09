@@ -37,8 +37,8 @@ function JustAnotherNav() {
             <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/' && 'text-primary'}`}>Home</li></Link>
             <Link href={'/for-sale'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/for-sale' && 'text-primary'}`}>For Sale</li></Link>
             <Link href={'/rent'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/rent' && 'text-primary'}`}>For Rent</li></Link>
-            <Link href={'/about-us'}>
-            <li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/about-us' && 'text-primary'}`}>About Us</li>
+            <Link href={'/agents-registered'}>
+            <li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/about-us' && 'text-primary'}`}>Agent Finder</li>
             </Link>
 
             
@@ -87,7 +87,7 @@ function JustAnotherNav() {
             <Link href={'/'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Home</Link>
             <Link href={'/for-sale'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Sale</Link>
             <Link href={'/rent'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Rent</Link>
-            <Link href={'/about-us'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>About Us</Link>
+            <Link href={'/agents-registered'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Agent Finder</Link>
             
             
 
