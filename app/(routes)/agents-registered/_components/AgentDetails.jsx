@@ -2,59 +2,102 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import Image from 'next/image';
+import { Clipboard } from 'lucide-react';
 
 const AgentDetails = ({ agentId }) => {
-  const [agent, setAgent] = useState(null);
+  const [agents, setAgents] = useState([]);
+  const [agencies, setAgencies] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch agents
+  const fetchAgents = async () => {
+    const { data, error } = await supabase.from('agents').select('*');
+    if (error) console.error('Error fetching agents:', error.message);
+    else setAgents(data);
+  };
+
+  // Fetch featured agencies
+  const fetchAgencies = async () => {
+    const { data, error } = await supabase.from('featured_agencies').select('*');
+    if (error) console.error('Error fetching agencies:', error.message);
+    else setAgencies(data);
+  };
+
   useEffect(() => {
-    const fetchAgentDetails = async () => {
-      const { data, error } = await supabase
-        .from('agents')
-        .select('*')
-        // .eq('id', agentId)
-        // .single();
-        // .single();
-
-      if (error) {
-        console.error('Error fetching agent:', error);
-      } else {
-        setAgent(data);
-      }
-
+    const fetchData = async () => {
+      await Promise.all([fetchAgents(), fetchAgencies()]);
       setLoading(false);
     };
+    fetchData();
+  }, []);
 
-    if (agentId) {
-      fetchAgentDetails();
-    }
-  }, [agentId]);
+  if (loading) return <p className="text-center text-gray-500">Loading agents and agencies...</p>;
 
-  if (loading) return <p className="text-center text-gray-500">Loading agent details...</p>;
-
-  if (!agent) return <p className="text-center text-red-500">Agent not found</p>;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 shadow-lg rounded-xl mt-5">
-      <div className="flex items-center gap-6">
-        <Image
-          src={agent.image_url || '/default-agent.jpg'}
-          alt={agent.name}
-          width={120}
-          height={120}
-          className="rounded-full object-cover border border-green-400"
-        />
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">{agent.name}</h2>
-          <p className="text-sm text-gray-600 mb-2">{agent.email}</p>
-          <p className="text-sm text-gray-600">📞 {agent.phone}</p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
+    {/* Agents Section */}
+    <section>
+      <h2 className="mt-5 text-3xl font-bold text-center text-slate-800 mb-6">
+        Meet our Agents
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {agents.map((agent) => (
+          <div
+            key={agent.id}
+            className="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition-all duration-200"
+          >
+            <div className="flex flex-col items-center">
+              <Image
+                src={agent.profile_pic || '/default-agent.jpg'}
+                alt={agent.fullname}
+                width={100}
+                height={100}
+                className="rounded-full object-cover border-4 border-green-400"
+              />
+              <h3 className="text-xl font-semibold text-gray-800 mt-4">{agent.fullname}</h3>
+              <p className="text-sm text-gray-600">{agent.email}</p>
+              <p className="text-sm text-gray-600 flex items-center justify-center">
+                <Clipboard className="inline h-5 w-4 mr-1" /> 📞 {agent.contactinfo}
+              </p>
+            </div>
+            <div className="mt-3 text-gray-700 text-sm">
+              <strong>Total Posts: {agent.totalposts}</strong> <br />
+              For Sale: {agent.posts_for_sale || 'No postings yet'} | For Rent: {agent.posts_for_rent || 'No postings yet.'}
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold text-gray-700">About</h3>
-        <p className="text-gray-600 mt-1">{agent.bio || 'No biography available.'}</p>
+    </section>
+
+    {/* Agencies Section */}
+    <section>
+      <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">Featured Agencies</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {agencies.map((agency) => (
+          <div
+            key={agency.id}
+            className="bg-blue-50 shadow-md rounded-xl p-4 hover:shadow-lg transition-all duration-200"
+          >
+            <div className="flex flex-col items-center">
+              <Image
+                src={agency.logo || '/default-agency-logo.jpg'}
+                alt={agency.name}
+                width={100}
+                height={100}
+                className="rounded-xl object-contain border-2 border-blue-400"
+              />
+              <h3 className="text-xl font-semibold text-blue-800 mt-4">{agency.name}</h3>
+              <p className="text-sm text-gray-600 text-center">{agency.description || 'No description provided.'}</p>
+              <p className="text-sm text-gray-600 mt-1">📍 {agency.location || 'Unknown'}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
+  </div>
   );
 };
 

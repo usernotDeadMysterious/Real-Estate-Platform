@@ -385,7 +385,8 @@ function Page() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="House">House</SelectItem>
-                      <SelectItem value="Single Portion">Single Portion</SelectItem>
+                      <SelectItem value="Upper Portion">Upper Portion</SelectItem>
+                      <SelectItem value="Lower Portion">Lower Portion</SelectItem>
                       <SelectItem value="Apartment">Apartment</SelectItem>
                       <SelectItem value="Business Area">Business Area</SelectItem>
                       <SelectItem value="Room">Room</SelectItem>

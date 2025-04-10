@@ -93,11 +93,17 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
   {/* <SelectItem value="Any">
       Any
     </SelectItem> */}
+    <SelectItem value="">
+      Any
+    </SelectItem>
     <SelectItem value="House">
       House
     </SelectItem>
-    <SelectItem value="Single Portion">
-      Single Portion
+    <SelectItem value="Upper Portion">
+      Upper Portion
+    </SelectItem>
+    <SelectItem value="Lower Portion">
+      Lower Portion
     </SelectItem>
     <SelectItem value="Apartment">
       Apartment

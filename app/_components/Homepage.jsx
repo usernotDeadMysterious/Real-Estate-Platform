@@ -4,7 +4,7 @@ import Link from 'next/link';
 // import { useUnreadMessages } from '../hooks/useUnreadMessages';
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
-import { MailCheck } from 'lucide-react';
+import { HouseIcon, MailCheck } from 'lucide-react';
 // import { useUnreadMessages2 } from '../hooks/useUnreadMessages2';
 import { useUnreadMessagesPolling } from "../hooks/useUnreadMessagesPolling";
 import GoogleMapSection from './GoogleMapSection';
@@ -19,6 +19,25 @@ function Homepage() {
     const [coordinates, setCoordinates] = useState();;
     const [listing, setListing] = useState([]);
     const { user, isLoaded } = useUser();
+    const backgroundImages = [
+      "/background1.jpg",
+      "/background2.jpg",
+      "/background3.jpg",
+      "/background4.jpg",
+      "/background5.jpg",
+      "/background6.jpg",
+      "/background7.jpg"
+    ];
+    const [current, setCurrent] = useState(0);
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrent((prev) => (prev + 1) % backgroundImages.length);
+      }, 5000); // Change every 5 seconds
+      return () => clearInterval(interval);
+    }, []);
+  
+    
     // const [type, setType] = useState(); 
     const [center,setCenter ] = useState({
         lat:  33.6844, // Latitude of Pakistan
@@ -89,7 +108,10 @@ function Homepage() {
 
             <div className="h-[80vh] flex flex-col items-center justify-center mt-5">
               
-                <main className="flex flex-col items-center justify-center flex-1 w-full pt-4 bg-[url('/home6hd.jpg')] bg-cover bg-center bg-no-repeat">
+            <main
+      className="flex flex-col items-center justify-center flex-1 w-full pt-4 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
+      style={{ backgroundImage: `url(${backgroundImages[current]})` }}
+    >
 
                   
                     <div className='flex flex-col w-[80vw] p-2'>
@@ -102,10 +124,10 @@ function Homepage() {
 
                     <div className='grid grid-cols-2 gap-5 p-2'>
                         <Link href={'/for-sale'}>
-                            <Button variant="outline" className="mt-4">For Sale</Button>
+                            <Button variant="outline" className="mt-4 bg-primary  text-slate-50">For Sale</Button>
                         </Link>
                         <Link href={'/rent'}>
-                            <Button variant='outline' className="mt-4">For Rent</Button>
+                            <Button variant='outline' className="mt-4 bg-primary text-slate-50" >For Rent</Button>
                         </Link>
                     </div>
                 </main>
@@ -113,9 +135,11 @@ function Homepage() {
 
         </div>
         
+        
         <div className='p-5 flex flex-col justify-center items-center mt-5'>
-        <h2 className='text-2xl text-slate-800 font-serif font-bold'>Registered Properties with us</h2>
-        <div className="h-[80vh] w-[70vw] flex flex-col items-center justify-center mt-5">
+        <div className='flex border-collapse border-solid w-full border-black border-2 rounded-lg pl-5 align-middle'>
+          <h2 className='text-2xl text-slate-800 font-serif font-bold mt-5 mb-5 '><HouseIcon className='inline'/> Registered Properties with us  </h2></div>
+        <div className="h-[80vh] w-[95vw] flex flex-col items-center justify-center mt-5">
             
         {/* <GoogleMapSection listing={listing} coordinates={coordinates} /> */}
         
@@ -137,6 +161,9 @@ function Homepage() {
     </GoogleMap>
         </div> 
         </div>
+
+        
+        
         
         </>
     );
