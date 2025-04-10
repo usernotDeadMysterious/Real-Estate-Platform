@@ -25,7 +25,7 @@ function JustAnotherNav() {
     }, [path]);
 
     return (
-      <div className='p-3 h-[15vh] flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
+      <div className='p-3 h-[10vh] flex justify-between shadow-lg  fixed top-0 w-full z-10 bg-green-100'>
         {/* Left Side */}
         <div className='flex gap-10 items-center'>
           <Link href={'/'}>
@@ -33,12 +33,25 @@ function JustAnotherNav() {
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className='hidden md:flex gap-20 text-nowrap'>
-            <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/' && 'text-primary'}`}>Home</li></Link>
-            <Link href={'/for-sale'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/for-sale' && 'text-primary'}`}>For Sale</li></Link>
-            <Link href={'/rent'}><li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/rent' && 'text-primary'}`}>For Rent</li></Link>
+          <ul className='hidden md:flex gap-5 text-nowrap  '>
+
+            <Link href={'/'}><li className={`hover:text-primary font-medium text-sm cursor-pointer  p-4 rounded-lg hover:border-solid hover:border-[2px] hover:border-primary ${path === '/' && 'text-primary'}`}>Home</li></Link>
+
+            <Link href={'/for-sale'}><li className={`hover:text-primary 
+            font-medium text-sm cursor-pointer p-4 rounded-lg 
+            hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary 
+            ${path === '/for-sale' && 'text-primary'}`}>For Sale</li></Link>
+            <Link href={'/rent'}><li className={`hover:text-primary font-medium text-sm cursor-pointer p-4 rounded-lg 
+            hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary ${path === '/rent' && 'text-primary'}`}>For Rent</li></Link>
             <Link href={'/agents-registered'}>
-            <li className={`hover:text-primary font-medium text-sm cursor-pointer ${path === '/about-us' && 'text-primary'}`}>Agent Finder</li>
+            <li className={`hover:text-primary font-medium text-sm cursor-pointer p-4 rounded-lg 
+              hover:border-solid 
+              hover:border-[2px] 
+              hover:border-primary ${path === '/agents-registered' && 'text-primary'}`}>Agent Finder</li>
             </Link>
 
             
@@ -48,7 +61,7 @@ function JustAnotherNav() {
         {/* Right Side */}
         <div className='hidden md:flex gap-6 items-center mr-10'>
           <Link href={'/add-new-listing'}>
-            <Button className='flex gap-2'><Plus className='h-5 w-5'/>Post your Ad</Button>
+            <Button className='flex gap-2 ' ><Plus className='h-5 w-5'/>Post your Ad</Button>
           </Link>
 
           {isSignedIn ? (
@@ -84,16 +97,26 @@ function JustAnotherNav() {
         {/* Mobile Menu Dropdown */}
         {menuOpen && (
           <div className="absolute top-16 left-0 w-full bg-white shadow-md p-4 md:hidden flex flex-col gap-4">
-            <Link href={'/'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link href={'/for-sale'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Sale</Link>
-            <Link href={'/rent'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>For Rent</Link>
-            <Link href={'/agents-registered'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Agent Finder</Link>
+            <Link href={'/'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link href={'/for-sale'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300   hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>For Sale</Link>
+            <Link href={'/rent'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>For Rent</Link>
+            <Link href={'/agents-registered'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>Agent Finder</Link>
             
             
 
             {isSignedIn ? (
               <>
-                <Link href={'/user'} className='p-2 rounded-lg bg-gray-100 text-primary hover:bg-gray-300' onClick={() => setMenuOpen(false)}>Profile</Link>
+                <Link href={'/user'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>Profile</Link>
                 {/* <Link href={'/my-listings'} onClick={() => setMenuOpen(false)}>My Listing</Link> */}
                 <Link href={'/add-new-listing'}  onClick={() => setMenuOpen(false)}>
               <Button className="w-full flex gap-2"><Plus className='h-5 w-5'/>Post your Ad</Button>

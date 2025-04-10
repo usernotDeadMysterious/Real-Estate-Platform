@@ -4,8 +4,11 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  /* background: rgb(186, 250, 186); */
 }
-
+*{
+  
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -77,4 +80,51 @@ body {
 
 .mt-28 {
   margin-top: 10rem;
+}
+
+
+/* Typing effect */
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  70% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+.typing-loop {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 5s steps(35, end) infinite;
+  position: relative;
+}
+
+/* Cursor as a separate pseudo-element */
+.typing-loop::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background-color: rgba(255, 255, 255, 0.75);
+  animation: blink 0.7s steps(1) infinite;
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

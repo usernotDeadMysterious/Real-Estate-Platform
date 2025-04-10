@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { GoogleMap } from '@react-google-maps/api';
 import MarkerItem from './MarkerItem';
+import FeaturedAgencies from './FeaturedAgencies';
 
 function Homepage() {
     // const unreadCount = useUnreadMessages2();
@@ -29,13 +30,35 @@ function Homepage() {
       "/background7.jpg"
     ];
     const [current, setCurrent] = useState(0);
+    const [isReversing, setIsReversing] = useState(false);
 
     useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrent((prev) => (prev + 1) % backgroundImages.length);
-      }, 5000); // Change every 5 seconds
-      return () => clearInterval(interval);
-    }, []);
+      let timeout;
+  
+      if (!isReversing) {
+        if (current < backgroundImages.length - 1) {
+          timeout = setTimeout(() => {
+            setCurrent((prev) => prev + 1);
+          }, 5500); // normal swipe delay
+        } else {
+          // Pause on last image, then reverse
+          timeout = setTimeout(() => {
+            setIsReversing(true);
+          }, 5000); // wait 3s before reversing
+        }
+      } else {
+        // Reverse to first image quickly (2s total, 500ms per step)
+        if (current > 0) {
+          timeout = setTimeout(() => {
+            setCurrent((prev) => prev - 1);
+          }, 5000);
+        } else {
+          setIsReversing(false); // restart loop
+        }
+      }
+  
+      return () => clearTimeout(timeout);
+    }, [current, isReversing]);
   
     
     // const [type, setType] = useState(); 
@@ -86,7 +109,7 @@ function Homepage() {
         <div>
             {/* Notification Bar for Unread Messages */}
             {isLoaded && user && (
-                <div className="fixed top-[20vh] right-4 bg-primary hover:bg-red-400 text-white text-sm font-medium rounded-full px-4 py-2 z-50 shadow-lg flex items-center gap-2">
+                <div className="fixed top-[20vh] right-4 bg-green-500 hover:bg-green-700 text-white text-sm font-medium rounded-full px-4 py-2 z-50 shadow-lg flex items-center gap-2">
                     <Link href="/owner/messages" className="cursor-pointer flex items-center gap-2">
                         <Image
                             src={user.imageUrl || "/default-avatar.png"} // Fallback image if user image is missing
@@ -106,28 +129,42 @@ function Homepage() {
             
 
 
-            <div className="h-[80vh] flex flex-col items-center justify-center mt-5">
+            <div className="relative w-full h-[90vh] overflow-hidden">
+  {/* Sliding Background Images */}
+  <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
+       style={{
+         transform: `translateX(-${current * 100}%)`
+       }}>
+    {backgroundImages.map((img, index) => (
+      <div
+        key={index}
+        className="w-full  h-screen bg-cover bg-center bg-no-repeat flex-shrink-0"
+        style={{ backgroundImage: `url(${img})` }}
+      />
+    ))}
+  </div>
               
-            <main
-      className="flex flex-col items-center justify-center flex-1 w-full pt-4 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
-      style={{ backgroundImage: `url(${backgroundImages[current]})` }}
-    >
+            <main className="relative  flex flex-col items-center justify-center h-full w-full ">
+  
+    
 
                   
                     <div className='flex flex-col w-[80vw] p-2'>
 
-                        <h2 className="text-center text-4xl font-bold font-serif text-slate-50 mt-4 drop-shadow-[8px_8px_6px_rgba(34,197,94,0.8)]">
-                            Find Your Dream Home with Ease
-                        </h2>
+                    <h2 className="text-center text-4xl font-bold font-serif text-blue-100 mt-4 drop-shadow-[8px_16px_16px_rgba(34,197,94,0.8)]">
+  <span className="typing-loop">Find Your Dream Home Easily</span>
+</h2>
+                    
+
                         
                     </div>
 
                     <div className='grid grid-cols-2 gap-5 p-2'>
                         <Link href={'/for-sale'}>
-                            <Button variant="outline" className="mt-4 bg-primary  text-slate-50">For Sale</Button>
+                            <Button variant="outline" className="mt-4 bg-green-100 text-primary  text-md">For Sale</Button>
                         </Link>
                         <Link href={'/rent'}>
-                            <Button variant='outline' className="mt-4 bg-primary text-slate-50" >For Rent</Button>
+                            <Button variant='outline' className="mt-4 bg-green-100 text-primary  text-md" >For Rent</Button>
                         </Link>
                     </div>
                 </main>
@@ -135,10 +172,13 @@ function Homepage() {
 
         </div>
         
-        
+        <FeaturedAgencies/>
+
+
+        {/* Registered Properties Locations on Map */}
         <div className='p-5 flex flex-col justify-center items-center mt-5'>
-        <div className='flex border-collapse border-solid w-full border-black border-2 rounded-lg pl-5 align-middle'>
-          <h2 className='text-2xl text-slate-800 font-serif font-bold mt-5 mb-5 '><HouseIcon className='inline'/> Registered Properties with us  </h2></div>
+        <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5 align-middle'>
+          <h2 className='text-2xl text-slate-800 font-serif font-bold mt-3 mb-3 '><HouseIcon className='inline'/> Registered Properties with us  </h2></div>
         <div className="h-[80vh] w-[95vw] flex flex-col items-center justify-center mt-5">
             
         {/* <GoogleMapSection listing={listing} coordinates={coordinates} /> */}
