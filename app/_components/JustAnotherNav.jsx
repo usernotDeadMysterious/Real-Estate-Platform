@@ -54,6 +54,13 @@ function JustAnotherNav() {
               hover:border-primary ${path === '/agents-registered' && 'text-primary'}`}>Agent Finder</li>
             </Link>
 
+            <Link href={'/get-registered'}>
+            <li className={`hover:text-primary font-medium text-sm cursor-pointer p-4 rounded-lg 
+              hover:border-solid 
+              hover:border-[2px] 
+              hover:border-primary ${path === '/get-registered' && 'text-primary'}`}>Register</li>
+            </Link>
+
             
           </ul>
         </div>
@@ -109,6 +116,9 @@ function JustAnotherNav() {
             <Link href={'/agents-registered'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
             hover:border-[2px] 
             hover:border-primary' onClick={() => setMenuOpen(false)}>Agent Finder</Link>
+            <Link href={'/get-registered'} className='p-2 rounded-lg bg-green-100 text-primary hover:bg-green-300  hover:border-solid 
+            hover:border-[2px] 
+            hover:border-primary' onClick={() => setMenuOpen(false)}>Register</Link>
             
             
 

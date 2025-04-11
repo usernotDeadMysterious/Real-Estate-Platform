@@ -131,7 +131,7 @@ function Homepage() {
 
             <div className="relative w-full h-[90vh] overflow-hidden">
   {/* Sliding Background Images */}
-  <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
+  <div className="absolute inset-0 flex transition-transform duration-3000 ease-in-out"
        style={{
          transform: `translateX(-${current * 100}%)`
        }}>
@@ -149,11 +149,11 @@ function Homepage() {
     
 
                   
-                    <div className='flex flex-col w-[80vw] p-2'>
+                    <div className=' flex flex-col  p-2 '>
 
-                    <h2 className="text-center text-4xl font-bold font-serif text-blue-100 mt-4 drop-shadow-[8px_16px_16px_rgba(34,197,94,0.8)]">
-  <span className="typing-loop">Find Your Dream Home Easily</span>
-</h2>
+                    <h2 className="  text-center p-2 text-3xl font-bold font-serif text-green-100 mt-4 drop-shadow-[8px_8px_8px_rgba(34,197,94,0.8)]">
+                      <span className="typing-loop">Find Your Dream Home Easily</span>
+                    </h2>
                     
 
                         
