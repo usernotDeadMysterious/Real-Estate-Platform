@@ -39,24 +39,7 @@ import AdditionalDetailsForm from "../_components/AdditionalDetailsForm";
 
 
 function Page() {
-  // const [formValues, setFormValues] = useState({
-  //   ownersCnic: "",        // Validated as 13 digits
-  //   contactInfo: "",       // Validated as 11 digits
-  //   title: "",             // Likely needed for listing details
-  //   description: "",
-  //   price: "",
-  //   location: "",
-  //   latitude: "",
-  //   longitude: "",
-  //   propertyType: "",
-  //   bedrooms: "",
-  //   bathrooms: "",
-  //   areaSize: "",
-  //   furnished: false,
-  //   images: [],            // Used in image upload handling
-  //   availability: "available",
-  //   active: "false",       // Used in publishBtnHandler
-  // });
+  
   const { id } = useParams(); // ✅ Correct way to access params
   const { user } = useUser();
   const router = useRouter();
@@ -259,6 +242,7 @@ function Page() {
         if (data){
           setLoading(false);
           toast('Listing published')
+          router.push('/'); 
         }
   }
   
@@ -439,9 +423,7 @@ function Page() {
                   defaultValue={listing?.price} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  {/* <h2 className="text-gray-500">HOA (Per Month) ($)</h2>
-                  <Input type="number" placeholder="100" name="hoa" onChange={handleChange}
-                  defaultValue={listing?.hoa} /> */}
+                  
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-5">

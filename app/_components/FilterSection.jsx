@@ -17,8 +17,9 @@ import { useEffect, useState } from "react";
 import { debounce } from "lodash"; // Install lodash if not already
 
 function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,handleSearchClick,setCity,setProvince,priceRange, setPriceRange,city,bathCount, bedCount, parkingCount, homeType, province}) {
-  const [minPrice, setMinPrice] = React.useState(0);
-const [maxPrice, setMaxPrice] = React.useState(10000000);
+  const [minPrice, setMinPrice] = useState(null);
+const [maxPrice, setMaxPrice] = useState(null);
+
 const formatCurrency = (value) => {
   if (value >= 10000000) return `${(value / 10000000).toFixed(1)} Cr`;
   if (value >= 100000) return `${(value / 100000).toFixed(1)} Lac`;
@@ -277,46 +278,46 @@ const syncSelect = (min, max) => {
 
   <div className="flex flex-col sm:flex-row gap-3">
     {/* Min Price Input */}
-    <div className="w-full md:w-[45%]">
-      <Label htmlFor="minPrice" className="text-sm font-medium text-muted-foreground">Min Price</Label>
-      <Input
-        id="minPrice"
-        aria-label="Minimum price"
-        type="number"
-        min={0}
-        value={minPrice}
-        onChange={(e) => {
-          const val = parseInt(e.target.value) || 0;
-          if (val <= maxPrice) {
-            setMinPrice(val);
-            setPriceRange(`${val}-${maxPrice}`);
-          }
-        }}
-        placeholder="Min Rs."
-        className="w-full"
-      />
-    </div>
+<Input
+  id="minPrice"
+  aria-label="Minimum price"
+  type="number"
+  min={0}
+  value={minPrice ?? ''}
+  onChange={(e) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && (maxPrice === null || val <= maxPrice)) {
+      setMinPrice(val);
+      setPriceRange(`${val}-${maxPrice ?? ''}`);
+    } else if (e.target.value === '') {
+      setMinPrice(null);
+    }
+  }}
+  placeholder="Min Rs."
+  className="w-full"
+/>
 
-    {/* Max Price Input */}
-    <div className="w-full md:w-[45%]">
-      <Label htmlFor="maxPrice" className="text-sm font-medium text-muted-foreground">Max Price</Label>
-      <Input
-        id="maxPrice"
-        aria-label="Maximum price"
-        type="number"
-        min={0}
-        value={maxPrice}
-        onChange={(e) => {
-          const val = parseInt(e.target.value) || 0;
-          if (val >= minPrice) {
-            setMaxPrice(val);
-            setPriceRange(`${minPrice}-${val}`);
-          }
-        }}
-        placeholder="Max Rs."
-        className="w-full"
-      />
-    </div>
+{/* Max Price Input */}
+<Input
+  id="maxPrice"
+  aria-label="Maximum price"
+  type="number"
+  min={0}
+  value={maxPrice ?? ''}
+  onChange={(e) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && (minPrice === null || val >= minPrice)) {
+      setMaxPrice(val);
+      setPriceRange(`${minPrice ?? ''}-${val}`);
+    } else if (e.target.value === '') {
+      setMaxPrice(null);
+    }
+  }}
+  placeholder="Max Rs."
+  className="w-full"
+/>
+
+
   </div>
 
   {/* Validation Message */}
