@@ -1,18 +1,19 @@
 "use client";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-// import { useUnreadMessages } from '../hooks/useUnreadMessages';
+
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import { HouseIcon, MailCheck } from 'lucide-react';
-// import { useUnreadMessages2 } from '../hooks/useUnreadMessages2';
+
 import { useUnreadMessagesPolling } from "../hooks/useUnreadMessagesPolling";
-import GoogleMapSection from './GoogleMapSection';
+// import GoogleMapSection from './GoogleMapSection';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { GoogleMap } from '@react-google-maps/api';
 import MarkerItem from './MarkerItem';
 import FeaturedAgencies from './FeaturedAgencies';
+import { toast, Toaster } from 'sonner';
 
 function Homepage() {
     // const unreadCount = useUnreadMessages2();
@@ -85,12 +86,15 @@ function Homepage() {
             listing_id
           )`)
           .eq('active', true)
-        //   .eq('type', type)
-          .order('id', { ascending: false });
+        
+          .order('id', { ascending: true })
+          .limit(100);
+          ;
+
     
         if (data) {
           setListing(data);
-          console.log(data);
+          // console.log(data);
         }
         if (error) {
           toast("Server Side Error");
@@ -99,10 +103,7 @@ function Homepage() {
       useEffect(() => {
         getLatestListing();
       }, []);
-    //   useEffect(() => {
-    //     getLatestListing();
-    //     console.log(type);
-    //   }, [type]);
+    
     
     return (
         <>
@@ -186,7 +187,7 @@ function Homepage() {
         <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={6}
+      zoom={11}
       onLoad={onload}
     //   onUnmount={onUnmount}
       gestureHandling='greedy'

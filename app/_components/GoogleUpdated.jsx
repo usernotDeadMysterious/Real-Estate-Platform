@@ -2,6 +2,7 @@ import { MapPin } from 'lucide-react';
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { toast } from 'sonner';
 
 const GooglePlacesAutocomplete = dynamic(
   () => import('react-google-places-autocomplete'),
@@ -23,10 +24,12 @@ function GoogleUpdated({ selectedAddress, setCoordinates }) {
               console.warn('No place selected');
               selectedAddress(null);
               setCoordinates(null);
+              toast('No place Selected')
               return;
             }
 
             console.log('Selected Place:', place);
+            toast('Place selected : ',place)
             selectedAddress(place);
 
             geocodeByAddress(place.label)

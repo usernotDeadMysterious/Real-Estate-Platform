@@ -28,11 +28,11 @@ function Developers() {
           
           <div className="bg-gray-50 p-4 rounded-lg shadow flex flex-col items-center">
             <img 
-              src="/placeholderimage.jpg" 
+              src="/chokra1.jpg" 
               alt="Jane Smith" 
               className="w-24 h-24 rounded-full mb-4"
             />
-            <h3 className="text-xl font-semibold text-gray-800">Ahmed Maaz</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Ahmad Maaz</h3>
             <p className="text-gray-600">Full Stack Developer</p>
             <p className="text-gray-600">Email: ahmadmaaz033482@gmail.com </p>
             <p className="text-gray-500 text-sm">Focusing on front-end technologies like React & Next JS, Back-end technologies like PHP </p>

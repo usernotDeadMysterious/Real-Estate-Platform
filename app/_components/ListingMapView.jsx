@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Listing from './Listing';
 import { supabase } from '@/utils/supabase/client';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import GoogleMapSection from './GoogleMapSection';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -16,7 +16,14 @@ function ListingMapView({ type  }) {
   const [parkingCount, setParkingCount] = useState(0);
   const [coordinates, setCoordinates] = useState();
   const [homeType, setHomeType] = useState(null);
-  const [message, setMessage] = useState(""); // State to handle message
+  const [message, setMessage] = useState(""); //
+  //  State to handle message
+
+
+  const [city, setCity] = useState(null);
+const [province, setProvince] = useState(null);
+const [priceRange, setPriceRange] = useState(null); // priceRange could be something like "0-50000"
+
 
   useEffect(() => {
     getLatestListing();
@@ -32,52 +39,79 @@ function ListingMapView({ type  }) {
       )`)
       .eq('active', true)
       .eq('type', type)
-      .order('id', { ascending: false });
+      .order('id', { ascending: true })
+      .limit(100);
 
     if (data) {
       setListing(data);
       console.log(data);
     }
     if (error) {
-      toast("Server Side Error");
+      console.log('Server side error: ',error)
+      Toaster("Server Side Error");
     }
   };
 
   const handleSearchClick = async () => {
-    // Check if 'Rooms' is selected and we are on '/for-sale' page
     if (type === 'Sell' && homeType === 'Rooms') {
       setMessage("For rooms, please visit the rental page. No listings found for sale with 'Rooms' selection.");
-      return; // Prevent search if rooms are selected on the 'For Sale' page
+      return;
     } else {
-      setMessage(""); // Reset message if search is valid
+      setMessage("");
     }
-    
-    
-    const searchTerm = searchedAddress?.value?.structured_formatting?.main_text;
+  
+    const searchTerm = searchedAddress?.value?.structured_formatting?.main_text || '';
+  
     let query = supabase
       .from('listing')
-      .select(`*,listingImages(
-        url,
-        listing_id
-      )`)
+      .select(`*, listingImages(url, listing_id)`)
       .eq('active', true)
-      .eq('type', type)
-      .gte('bedroom', bedCount)
-      .gte('bathroom', bathCount)
-      .gte('parking', parkingCount)
-      .like('address', '%' + searchTerm + '%')
-      .order('id', { ascending: false });
-
-    if (homeType) {  // Changed here: Using homeType prop directly instead of local state
-      query = query.eq('propertyType', homeType);
+      .eq('type', type);
+  
+    // Apply filters conditionally
+    if (homeType) query = query.eq('propertyType', homeType);
+    if (city) query = query.eq('city', city);
+    if (province) query = query.eq('province_name', province);
+    if (bedCount) query = query.gte('bedroom', bedCount);
+    if (bathCount) query = query.gte('bathroom', bathCount);
+    if (parkingCount) query = query.gte('parking', parkingCount);
+    if (searchTerm) query = query.like('address', `%${searchTerm}%`);
+  
+    // Handle price range if set
+    if (priceRange) {
+      const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+      query = query.gte('price', minPrice).lte('price', maxPrice);
     }
-
+  
+    // Apply ordering and limit the result set
+    query = query.order('id', { ascending: true }).range(0, 39);
+  
+    // Execute query
     const { data, error } = await query;
-    if (data) {
+  
+    if (error) {
+      console.error('Search error:', error);
+      toast.error("An error occurred while searching listings.");
+      return;
+    }
+  
+    if (data && data.length > 0) {
       setListing(data);
+    } else {
+      setListing([]);
+      toast.info("No listings matched your criteria.");
     }
   };
+  
 
+  
+  
+  
+  // useEffect(() => {
+  //   handleSearchClick();
+  // }, [bedCount, bathCount, parkingCount, city, province, priceRange, homeType]);
+
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       
@@ -103,7 +137,11 @@ function ListingMapView({ type  }) {
             setBedCount={setBedCount}
             setParkingCount={setParkingCount}
             setCoordinates={setCoordinates}
-            setHomeType={setHomeType} 
+            setHomeType={setHomeType}
+            setCity={setCity}
+      setProvince={setProvince}
+      setPriceRange={setPriceRange}
+            
           />
         </div>
       )}

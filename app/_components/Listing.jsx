@@ -13,7 +13,10 @@ function Listing({listing,
   setBedCount,
   setParkingCount,
   setHomeType,
-  setCoordinates
+  setCoordinates,
+  setCity,
+  setProvince,
+  setPriceRange
 
 }) {
 
@@ -46,6 +49,9 @@ function Listing({listing,
       setHomeType={setHomeType}
       setCoordinates={setCoordinates}
       handleSearchClick={handleSearchClick}
+      setCity={setCity}
+      setProvince={setProvince}
+      setPriceRange={setPriceRange}
 
       />
 
@@ -69,7 +75,7 @@ function Listing({listing,
           hover:border-primary cursor-pointer rounded-lg">
 
               <Image 
-                src={item.listingImages[0].url} 
+                src={item.listingImages[0].url || 'house-placeholder.jpeg'} 
                 width={800}
                 height={150}
                 className='rounded-lg object-cover h-[170px] w-full'
