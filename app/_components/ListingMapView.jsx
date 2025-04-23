@@ -80,7 +80,7 @@ const [priceRange, setPriceRange] = useState(null); // priceRange could be somet
     // Handle price range if set
     if (priceRange) {
       const [minPrice, maxPrice] = priceRange.split('-').map(Number);
-      query = query.gte('price', minPrice).lte('price', maxPrice);
+      query = query.gte('price', minPrice).lte('price', maxPrice).order('price', { ascending: true });
     }
   
     // Apply ordering and limit the result set

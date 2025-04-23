@@ -6,14 +6,110 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Bath, Bed, BedDouble, CarFront, DollarSign, Search } from 'lucide-react'
+import { Bath, Bed, BedDouble, CarFront, CrossIcon, DollarSign, FolderClosedIcon, PenIcon, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,handleSearchClick,setCity,setProvince,setPriceRange}) {
+import { Input } from '@/components/ui/input';
+import { Label } from '@radix-ui/react-dropdown-menu';
+import { Slider } from '@/components/ui/slider';
+
+import { useEffect, useState } from "react";
+import { debounce } from "lodash"; // Install lodash if not already
+
+function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,handleSearchClick,setCity,setProvince,priceRange, setPriceRange,city,bathCount, bedCount, parkingCount, homeType, province}) {
+  const [minPrice, setMinPrice] = React.useState(0);
+const [maxPrice, setMaxPrice] = React.useState(10000000);
+const formatCurrency = (value) => {
+  if (value >= 10000000) return `${(value / 10000000).toFixed(1)} Cr`;
+  if (value >= 100000) return `${(value / 100000).toFixed(1)} Lac`;
+  if (value >= 1000) return `${(value / 1000).toFixed(1)} K`;
+  return value;
+};
+
+// Outside component (or inside useEffect/init block)
+const debounceMin = debounce((val) => {
+  setMinPrice(val);
+  setPriceRange(`${val}-${maxPrice}`);
+  syncSelect(val, maxPrice);
+}, 300);
+
+const debounceMax = debounce((val) => {
+  setMaxPrice(val);
+  setPriceRange(`${minPrice}-${val}`);
+  syncSelect(minPrice, val);
+}, 300);
+
+const debounceSlider = debounce(([min, max]) => {
+  setMinPrice(min);
+  setMaxPrice(max);
+  setPriceRange(`${min}-${max}`);
+  syncSelect(min, max);
+}, 300);
+
+const syncSelect = (min, max) => {
+  const rangeMap = {
+    "0-100000": [0, 100000],
+    "100000-500000": [100000, 500000],
+    "500000-1000000": [500000, 1000000],
+    "1000000-5000000": [1000000, 5000000],
+    "5000000-9999999999": [5000000, 9999999999],
+  };
+
+  for (const [key, [rMin, rMax]] of Object.entries(rangeMap)) {
+    if (min === rMin && max === rMax) {
+      setPriceRange(key);
+      return;
+    }
+  }
+
+  // If custom range doesn't match predefined
+  setPriceRange(`${min}-${max}`);
+};
+
+
   return (
     <div>
-    <div className='px-3 py-2 gap-3 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 w-full'>
-      <Select onValueChange={setBedCount}>
+<h4 className='text-sm text-slate-400'>Location Filter </h4>
+<div className='px-3 py-2 gap-3 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 w-full'>
+  
+      {/* City Filter */}
+<Select value={city} onValueChange={setCity}>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="City" />
+  </SelectTrigger>
+  <SelectContent>
+  
+    <SelectItem value="Peshawar">Peshawar</SelectItem>
+    <SelectItem value="Islamabad">Islamabad</SelectItem>
+    <SelectItem value="Rawalpindi">Rawalpindi</SelectItem>
+    <SelectItem value="Lahore">Lahore</SelectItem>
+    <SelectItem value="Faisalabad">Faisalabad</SelectItem>
+    <SelectItem value="Karachi">Karachi</SelectItem>
+  </SelectContent>
+</Select>
+
+{/* Province Filter */}
+<Select value={province} onValueChange={setProvince}>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Province" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</SelectItem>
+    <SelectItem value="Islamabad Capital">Islamabad Capital</SelectItem>
+    <SelectItem value="Punjab">Punjab</SelectItem>
+    <SelectItem value="Sindh">Sindh</SelectItem>
+    <SelectItem value="Balochistan">Balochistan</SelectItem>
+  </SelectContent>
+</Select>
+
+    </div>
+
+    <h4 className='text-sm text-slate-400'>Filter by Features  </h4>
+    <div className='px-3 py-2 gap-3 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 w-full'>
+
+      {/* Bedrooms filter  */}
+
+      <Select value={bedCount} onValueChange={setBedCount}>
   <SelectTrigger className=" w-full">
     <SelectValue placeholder="Bedrooms" />
   </SelectTrigger>
@@ -47,9 +143,11 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
   </SelectContent>
       </Select>
 
-      <Select onValueChange={setBathCount}>
+{/* bathrooms filter  */}
+
+      <Select value={bathCount} onValueChange={setBathCount}>
   <SelectTrigger className=" w-full">
-    <SelectValue placeholder="Bath" />
+    <SelectValue placeholder="Bathrooms" />
   </SelectTrigger>
   <SelectContent>
 
@@ -79,7 +177,9 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
   </SelectContent>
       </Select>
 
-      <Select onValueChange={setParkingCount}>
+{/* Parking Filter  */}
+
+      <Select value={parkingCount} onValueChange={setParkingCount}>
   <SelectTrigger className=" w-full">
     <SelectValue placeholder="Parking" />
   </SelectTrigger>
@@ -103,17 +203,33 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
   </SelectContent>
       </Select>
 
- 
-
-
-      <Select onValueChange={(value)=>value=='Any'?setHomeType(null):setHomeType(value)}>
-  <SelectTrigger className=" w-full">
-    <SelectValue placeholder="Type" />
+  
+{/* Property type filter */}
+<Select value={homeType} onValueChange={setHomeType}>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Property Type" />
   </SelectTrigger>
   <SelectContent>
-  {/* <SelectItem value="Any">
-      Any
-    </SelectItem> */}
+    
+    <SelectItem value="House">House</SelectItem>
+    <SelectItem value="Flat">Flat</SelectItem>
+    <SelectItem value="Upper Portion">Upper Portion</SelectItem>
+    <SelectItem value="Lower Portion">Lower Portion</SelectItem>
+    <SelectItem value="Farm House">Farm House</SelectItem>
+    <SelectItem value="Penthouse">Penthouse</SelectItem>
+    <SelectItem value="Apartment">Apartment</SelectItem>
+    <SelectItem value="Business Area">Business Area</SelectItem>
+    <SelectItem value="Rooms">Rooms</SelectItem>
+  </SelectContent>
+</Select>
+
+      {/* <Select value={homeType ?? "Any"} onValueChange={(value) => value === "Any" ? setHomeType(null) : setHomeType(value)}>
+
+  <SelectTrigger className=" w-full">
+    <SelectValue placeholder="Property Type" />
+  </SelectTrigger>
+  <SelectContent>
+  
     
     <SelectItem value="House">
       House
@@ -143,52 +259,110 @@ function FilterSection({setBathCount,setBedCount,setParkingCount,setHomeType,han
       Rooms
     </SelectItem>
   </SelectContent>
-      </Select>
+      </Select> */}
 
-           {/* City Filter */}
-<Select onValueChange={setCity}>
-  <SelectTrigger className="w-full">
-    <SelectValue placeholder="City" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="Peshawar">Peshawar</SelectItem>
-    <SelectItem value="Islamabad">Islamabad</SelectItem>
-    <SelectItem value="Lahore">Lahore</SelectItem>
-    <SelectItem value="Karachi">Karachi</SelectItem>
-  </SelectContent>
-</Select>
+           
 
-{/* Province Filter */}
-<Select onValueChange={setProvince}>
-  <SelectTrigger className="w-full">
-    <SelectValue placeholder="Province" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="KPK">KPK</SelectItem>
-    <SelectItem value="Punjab">Punjab</SelectItem>
-    <SelectItem value="Sindh">Sindh</SelectItem>
-    <SelectItem value="Balochistan">Balochistan</SelectItem>
-  </SelectContent>
-</Select>
-
-{/* Price Range Filter */}
-<Select onValueChange={setPriceRange}>
-  <SelectTrigger className="w-full">
-    <SelectValue placeholder="Price Range" />
-  </SelectTrigger>
-  <SelectContent>
-  <SelectItem value="0-100000">Under Rs. 1 Lac</SelectItem>
-    <SelectItem value="100000-500000">Rs. 1 Lac - 5 Lac</SelectItem>
-    <SelectItem value="500000-1000000">Rs. 5 Lac - 10 Lac</SelectItem>
-    <SelectItem value="1000000-5000000">Rs. 10 Lac - 50 Lac</SelectItem>
-    <SelectItem value="5000000-9999999999">Above Rs. 50 Lac</SelectItem>
-  </SelectContent>
-</Select>
-
-      
+   
 
 
     </div>
+
+    
+   
+    <h4 className='text-sm text-slate-400'>Filter by Price Range  </h4>
+{/* Price Range Filter */}
+<div className="w-full flex flex-col gap-3 px-3 py-2">
+  <Label className="text-sm font-medium text-muted-foreground">Enter Amount</Label>
+
+  <div className="flex flex-col sm:flex-row gap-3">
+    {/* Min Price Input */}
+    <div className="w-full md:w-[45%]">
+      <Label htmlFor="minPrice" className="text-sm font-medium text-muted-foreground">Min Price</Label>
+      <Input
+        id="minPrice"
+        aria-label="Minimum price"
+        type="number"
+        min={0}
+        value={minPrice}
+        onChange={(e) => {
+          const val = parseInt(e.target.value) || 0;
+          if (val <= maxPrice) {
+            setMinPrice(val);
+            setPriceRange(`${val}-${maxPrice}`);
+          }
+        }}
+        placeholder="Min Rs."
+        className="w-full"
+      />
+    </div>
+
+    {/* Max Price Input */}
+    <div className="w-full md:w-[45%]">
+      <Label htmlFor="maxPrice" className="text-sm font-medium text-muted-foreground">Max Price</Label>
+      <Input
+        id="maxPrice"
+        aria-label="Maximum price"
+        type="number"
+        min={0}
+        value={maxPrice}
+        onChange={(e) => {
+          const val = parseInt(e.target.value) || 0;
+          if (val >= minPrice) {
+            setMaxPrice(val);
+            setPriceRange(`${minPrice}-${val}`);
+          }
+        }}
+        placeholder="Max Rs."
+        className="w-full"
+      />
+    </div>
+  </div>
+
+  {/* Validation Message */}
+  {minPrice > maxPrice && (
+    <p className="text-red-500 text-xs text-center mt-1">
+      Min price should not exceed Max price.
+    </p>
+  )}
+
+  {/* Display Range */}
+  <div className="text-sm text-muted-foreground text-center ">
+    Rs. {formatCurrency(minPrice)} – Rs. {formatCurrency(maxPrice)}
+  </div>
+
+  {/* Reset Button */}
+  <div className="flex justify-center ">
+    <Button
+      variant="outline"
+      size="sm"
+      className='w-full'
+      onClick={() => {
+        const defaultMin = 0;
+        const defaultMax = 10000000;
+        setMinPrice(defaultMin);
+        setMaxPrice(defaultMax);
+        setPriceRange(`${defaultMin}-${defaultMax}`);
+        setCity("Any");
+        setProvince("");
+        setBedCount("");
+        setBathCount("");
+        setParkingCount("");
+        setHomeType();
+      }}
+      
+        >
+      <PenIcon/>
+      Reset
+    </Button>
+  </div>
+</div>
+
+
+
+
+
+{/* Search button  */}
     <div className='px-3 py-2 gap-3 grid grid-cols-1  w-full'>
 
     <Button className='flex gap-2'
