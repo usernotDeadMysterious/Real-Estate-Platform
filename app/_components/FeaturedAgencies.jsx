@@ -23,7 +23,7 @@ function FeaturedAgencies() {
           fetchData();
         }, []);
       
-        if (loading) return <p className="text-center text-gray-500">Loading agencies data...</p>;
+        if (loading) return <p className="text-center text-gray-500 ">Loading agencies data...</p>;
   return (
     <div className=''>
       
@@ -32,7 +32,7 @@ function FeaturedAgencies() {
             <section className=' hover:border-primary hover:border-2px hover:border-solid'>
             <div className='p-5 flex flex-col justify-center items-center mt-5 gap-3'>
                 <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5 align-middle'>
-                    <h2 className='text-2xl text-slate-800 font-serif font-bold mt-3 mb-3 '><Handshake className='inline'/> Featured Agencies  </h2>
+                    <h2 className='text-xl text-green-600 font-serif mt-3 mb-3   '><Handshake className='inline'/> Featured Agencies  </h2>
                 </div>
             </div>
       
@@ -40,12 +40,12 @@ function FeaturedAgencies() {
                 {agencies.map((agency) => (
                   <div
                     key={agency.id}
-                    className="shadow-md rounded-xl p-4 hover:shadow-lg transition-all duration-200"
+                    className="shadow-md rounded-xl p-4 hover:shadow-lg hover:border-green-500 hover:border-solid-2px hover:border-[1px] transition-all duration-200"
                   >
                     
       
                     
-                    <div className="flex flex-row items-center gap-4">
+                    <div className="flex flex-row items-center gap-1">
     {/* Logo - 1/3 */}
     <div className="w-1/3 flex justify-center">
       <Image

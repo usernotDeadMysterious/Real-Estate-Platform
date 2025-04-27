@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
-import { HouseIcon, MailCheck } from 'lucide-react';
+import { HomeIcon, HouseIcon, MailCheck } from 'lucide-react';
 
 import { useUnreadMessagesPolling } from "../hooks/useUnreadMessagesPolling";
 // import GoogleMapSection from './GoogleMapSection';
@@ -152,15 +152,15 @@ function Homepage() {
                   
                     <div className=' flex flex-col  p-2 '>
 
-                    <h2 className="  text-center p-2 text-3xl font-bold font-serif text-green-100 mt-4 drop-shadow-[8px_8px_8px_rgba(34,197,94,0.8)]">
-                      <span className="typing-loop">Find Your Dream Home Easily</span>
+                    <h2 className="  text-center p-1 text-3xl font-serif font-semibold text-green-100  drop-shadow-[8px_8px_8px_rgba(34,197,94,0.8)]">
+                      <span className="typing-loop">Find Your Dream Home</span>
                     </h2>
                     
 
                         
                     </div>
 
-                    <div className='grid grid-cols-2 gap-5 p-2'>
+                    <div className='grid grid-cols-2 gap-3 p-1'>
                         <Link href={'/for-sale'}>
                             <Button variant="outline" className="mt-4 bg-green-100 text-primary  text-md">For Sale</Button>
                         </Link>
@@ -168,7 +168,17 @@ function Homepage() {
                             <Button variant='outline' className="mt-4 bg-green-100 text-primary  text-md" >For Rent</Button>
                         </Link>
                     </div>
+                    
+                    
                 </main>
+                {/* Div to for showing something  */}
+                {/* <div className='grid grid-cols-3 absolute bottom-10 left-10 bg-white 
+                    '>
+                  <h3>HEllo </h3>
+                  <h3>HEllo </h3>
+                  <h3>HEllo </h3>
+                  <h3>HEllo </h3>
+                </div> */}
             </div>
 
         </div>
@@ -178,11 +188,11 @@ function Homepage() {
 
         {/* Registered Properties Locations on Map */}
         <div className='p-5 flex flex-col justify-center items-center mt-5'>
-        <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5 align-middle'>
-          <h2 className='text-2xl text-slate-800 font-serif font-bold mt-3 mb-3 '><HouseIcon className='inline'/> Registered Properties with us  </h2></div>
-        <div className="h-[80vh] w-[95vw] flex flex-col items-center justify-center mt-5">
+        <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5  items-center'>
+          <h2 className='text-xl text-green-600 font-serif mt-3 mb-3  '><HomeIcon className='inline'/> Registered Properties with us  </h2></div>
+        <div className="h-[80vh] sm:w-full md:w-[90vw] flex flex-col items-center justify-center mt-5">
             
-        {/* <GoogleMapSection listing={listing} coordinates={coordinates} /> */}
+        
         
         <GoogleMap
       mapContainerStyle={containerStyle}
