@@ -70,6 +70,7 @@ export default function Footer() {
             <div className="flex gap-4 mt-4">
               <Link href="#" className="text-gray-400 hover:text-white transition">
                 <Facebook className="w-5 h-5" />
+                <h3>Facebook</h3>
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition">
                 <Twitter className="w-5 h-5" />

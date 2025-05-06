@@ -187,7 +187,7 @@ function Homepage() {
 
 
         {/* Registered Properties Locations on Map */}
-        <div className='p-5 flex flex-col justify-center items-center mt-5'>
+        {/* <div className='p-5 flex flex-col justify-center items-center mt-5'>
         <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5  items-center'>
           <h2 className='text-xl text-green-600 font-serif mt-3 mb-3  '><HomeIcon className='inline'/> Registered Properties with us  </h2></div>
         <div className="h-[80vh] sm:w-full md:w-[90vw] flex flex-col items-center justify-center mt-5">
@@ -199,10 +199,10 @@ function Homepage() {
       center={center}
       zoom={11}
       onLoad={onload}
-    //   onUnmount={onUnmount}
+    
       gestureHandling='greedy'
     >
-      {/* Child components, such as markers, info windows, etc. */}
+      
       {listing.map((item,index)=>(
         <MarkerItem
         key={index}
@@ -211,7 +211,32 @@ function Homepage() {
       ))}
     </GoogleMap>
         </div> 
-        </div>
+        </div> */}
+        <div className='p-5 flex flex-col justify-center items-center mt-5'>
+  <div className='flex border-collapse border-solid w-full bg-green-100 border-2 rounded-lg pl-5 items-center'>
+    <h2 className='text-xl text-green-600 font-serif mt-3 mb-3'>
+      <HomeIcon className='inline'/> Registered Properties with us
+    </h2>
+  </div>
+
+  <div className="h-[80vh] w-full md:w-[90vw] flex flex-col items-center justify-center mt-5">
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={11}
+      onLoad={onload}
+      gestureHandling='greedy'
+    >
+      {listing.map((item,index)=>(
+        <MarkerItem
+          key={index}
+          item={item}
+        />
+      ))}
+    </GoogleMap>
+  </div>
+</div>
+
 
         
         
